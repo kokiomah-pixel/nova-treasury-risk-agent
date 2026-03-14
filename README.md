@@ -36,3 +36,103 @@ This is a decision-support example only.
 
 ```python
 ctx = nova.context()
+
+
+
+Example logic:
+
+```python
+ctx = get_context(asset="cbBTC", intent="deploy_liquidity", size=50000)
+action = decide_treasury_posture(ctx)
+
+print("Regime:", ctx.get("regime"))
+print("Guardrail:", ctx.get("guardrail", {}).get("advisory"))
+print("Treasury posture:", action)
+```
+
+---
+
+# Treasury Decision Model
+
+The starter agent uses Nova in this way:
+
+- Stress → pause
+- Elevated Fragility → reduce deployment pace
+- high severity guardrail → reduce exposure
+- otherwise → proceed
+
+Nova does not deploy capital.  
+Execution remains external to Nova.
+
+---
+
+# Repository Structure
+
+```
+nova-treasury-risk-agent/
+│
+├ examples/
+│   └── run_treasury_agent.py
+│
+├ src/
+│   ├── nova_client.py
+│   └── treasury_policy.py
+│
+├ .env.example
+├ requirements.txt
+├ README.md
+└ LICENSE
+```
+
+---
+
+# Quick Start
+
+Install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Run the example:
+
+```
+python examples/run_treasury_agent.py
+```
+
+---
+
+# Environment
+
+Create a `.env` file from `.env.example` and configure:
+
+```
+NOVA_API_URL=
+NOVA_API_KEY=
+```
+
+---
+
+# Nova API Role
+
+This example uses Nova as decision-support infrastructure.
+
+Nova may:
+
+- classify market regime
+- provide advisory guardrails
+- expose historical memory context
+- provide verification metadata
+
+Nova must not:
+
+- execute treasury reallocations
+- rebalance capital automatically
+- block treasury actions directly
+- override downstream governance logic
+
+---
+
+# License
+
+MIT
